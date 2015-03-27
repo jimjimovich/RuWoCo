@@ -9,7 +9,7 @@ class RuWoCo
 
     attr_accessor :consumer_key, :consumer_secret, :api_url, :is_ssl
 
-    API_ENDPOINT = "wc-api/v1/"
+    API_ENDPOINT = "wc-api/v2/"
     HTTP_GET = "GET"
     HTTP_POST = "POST"
 
