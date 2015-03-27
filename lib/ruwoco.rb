@@ -100,7 +100,7 @@ class RuWoCo
         return make_api_call("products/count")
     end
     
-    def create_product(order_id, params = {})
+    def create_product(params = {})
         return make_api_call("products", params, 'POST')
     end
 
