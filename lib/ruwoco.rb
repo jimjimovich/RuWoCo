@@ -115,7 +115,7 @@ class RuWoCo
     def make_api_call(endpoint, params = {}, method='GET')
         if (!@is_ssl)
             params[:oauth_consumer_key] = @consumer_key
-            params[:oauth_nonce] = Digest::SHA1.hexdigest(Time.new.to_i)
+            params[:oauth_nonce] = Digest::SHA1.hexdigest(Time.new.to_s)
             params[:oauth_signature_method] = 'HMAC-256'
             params[:oauth_timestamp] = Time.new.to_i
             params[:oauth_signature] = generate_oauth_signature(endpoint, params, method)
