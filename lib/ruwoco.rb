@@ -126,6 +126,7 @@ class RuWoCo
             uri = URI(@api_url + endpoint + '?' + query)
             http = Net::HTTP.new(uri.host, uri.port)
             http.use_ssl = true
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
             req = Net::HTTP::Get.new(uri.request_uri)
             req.basic_auth(@consumer_key, @consumer_secret)
             res = http.start { |test| test.request(req) }
@@ -136,6 +137,7 @@ class RuWoCo
             req.body = params.to_json
             sock = Net::HTTP.new(url.host, url.port)
             sock.use_ssl = true
+            sock.verify_mode = OpenSSL::SSL::VERIFY_NONE
             res = sock.start { |test| test.request(req) }
         else
             raise "Unsupported HTTP operation requested"    
