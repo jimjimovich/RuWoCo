@@ -143,7 +143,7 @@ class RuWoCo
             raise "Unsupported HTTP operation requested"    
         end
 
-        return res.body.to_json()
+        return res.body
     end
 
     def generate_oauth_signature(endpoint, params, method)
