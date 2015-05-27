@@ -129,8 +129,10 @@ class RuWoCo
             query = URI.encode_www_form(params)
             uri = URI(@api_url + endpoint + '?' + query)
             http = Net::HTTP.new(uri.host, uri.port)
-            http.use_ssl = true
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+            if @is_ssl
+              http.use_ssl = true
+              http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+            end
             req = Net::HTTP::Get.new(uri.request_uri)
             req.basic_auth(@consumer_key, @consumer_secret)
             res = http.start { |test| test.request(req) }
@@ -140,8 +142,10 @@ class RuWoCo
             req.basic_auth(@consumer_key, @consumer_secret)
             req.body = params.to_json
             sock = Net::HTTP.new(url.host, url.port)
-            sock.use_ssl = true
-            sock.verify_mode = OpenSSL::SSL::VERIFY_NONE
+            if @is_ssl
+              sock.use_ssl = true
+              sock.verify_mode = OpenSSL::SSL::VERIFY_NONE
+            end
             res = sock.start { |test| test.request(req) }
         else
             raise "Unsupported HTTP operation requested"    
@@ -154,10 +158,9 @@ class RuWoCo
         base_request_uri = CGI::escape(@api_url + endpoint)
 
         query_params = []
-        params.each { |key, value| query_params.push(CGI::escape(key) + "%3D" + CGI::escape(value)) }
+        params.each { |key, value| query_params.push(CGI::escape(key.to_s) + "%3D" + CGI::escape(value.to_s)) }
 
-        query_string = "%26".join(query_params)
-
+        query_string = query_params.join("%26")
         string_to_sign = method + "&" + base_request_uri + '&' + query_string
 
         return Base64.strict_encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha256'), @consumer_secret, string_to_sign))
